@@ -62,6 +62,24 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Sprint"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4642078-fc7c-4098-add5-66d21e9b048e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""4e8dc498-e9f1-4d87-8a70-2db26ca26230"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +170,28 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
                     ""action"": ""Camera Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de17d70d-24c9-48cd-a8a6-7ed1d330aec8"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e269b54d-d081-4eac-8856-80f66fad4c7c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard And Mouse"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -181,6 +221,8 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Skills = m_Player.FindAction("Skills", throwIfNotFound: true);
         m_Player_CameraRotate = m_Player.FindAction("Camera Rotate", throwIfNotFound: true);
+        m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -246,6 +288,8 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Skills;
     private readonly InputAction m_Player_CameraRotate;
+    private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Jump;
     public struct PlayerActions
     {
         private @Input_Neko m_Wrapper;
@@ -254,6 +298,8 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Skills => m_Wrapper.m_Player_Skills;
         public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
+        public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -275,6 +321,12 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
             @CameraRotate.started += instance.OnCameraRotate;
             @CameraRotate.performed += instance.OnCameraRotate;
             @CameraRotate.canceled += instance.OnCameraRotate;
+            @Sprint.started += instance.OnSprint;
+            @Sprint.performed += instance.OnSprint;
+            @Sprint.canceled += instance.OnSprint;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -291,6 +343,12 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
             @CameraRotate.started -= instance.OnCameraRotate;
             @CameraRotate.performed -= instance.OnCameraRotate;
             @CameraRotate.canceled -= instance.OnCameraRotate;
+            @Sprint.started -= instance.OnSprint;
+            @Sprint.performed -= instance.OnSprint;
+            @Sprint.canceled -= instance.OnSprint;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -323,5 +381,7 @@ public partial class @Input_Neko: IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnSkills(InputAction.CallbackContext context);
         void OnCameraRotate(InputAction.CallbackContext context);
+        void OnSprint(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
